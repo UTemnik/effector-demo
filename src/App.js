@@ -1,6 +1,16 @@
 import React from 'react'
+import { useStore } from "effector-react";
+import $store, { setNewTodo, addTodo } from './store';
+import List from "./components/List";
 
 const App = () => {
+  const store = useStore($store);
+
+  const onSave = (e) => {
+    e.preventDefault();
+    addTodo();
+  }
+
   return (
     <section className="vh-100" style={{backgroundColor : "#eee"}}>
       <div className="container py-5 h-100">
@@ -14,59 +24,25 @@ const App = () => {
                 <form className="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
                   <div className="col-12">
                     <div className="form-outline">
-                      <input type="text" className="form-control" placeholder="Enter a task here"/>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter a task here"
+                        value={store.newTodo}
+                        onChange={(e) => setNewTodo(e.target.value)}
+                      />
                     </div>
                   </div>
 
                   <div className="col-12">
-                    <button type="submit" className="btn btn-primary">Save</button>
+                    <button className="btn btn-primary" onClick={onSave}>Save</button>
                   </div>
 
                   <div className="col-12">
-                    <button type="submit" className="btn btn-warning">Get tasks</button>
+                    <button className="btn btn-warning">Get tasks</button>
                   </div>
                 </form>
-
-                <table className="table mb-4">
-                  <thead>
-                  <tr>
-                    <th scope="col">No.</th>
-                    <th scope="col">Todo item</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Buy groceries for next week</td>
-                    <td>In progress</td>
-                    <td>
-                      <button type="submit" className="btn btn-danger">Delete</button>
-                      <button type="submit" className="btn btn-success ms-1">Finished</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Renew car insurance</td>
-                    <td>In progress</td>
-                    <td>
-                      <button type="submit" className="btn btn-danger">Delete</button>
-                      <button type="submit" className="btn btn-success ms-1">Finished</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Sign up for online course</td>
-                    <td>In progress</td>
-                    <td>
-                      <button type="submit" className="btn btn-danger">Delete</button>
-                      <button type="submit" className="btn btn-success ms-1">Finished</button>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-
+                 <List />
               </div>
             </div>
           </div>
