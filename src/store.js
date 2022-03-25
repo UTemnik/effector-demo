@@ -1,9 +1,14 @@
-import { createEvent, createStore } from 'effector';
+import { createEvent, createStore, createEffect } from 'effector';
 
 export const setNewTodo = createEvent();
 export const addTodo = createEvent();
 export const toggleTodo = createEvent();
 export const deleteTodo = createEvent();
+
+export const load = createEffect(async (url) => {
+  const req = await fetch(url);
+  return req.json();
+})
 
 const addTodoList = (todos, text) => [
   ...todos,
@@ -26,7 +31,7 @@ const deleteTodoList = (todos, id) => todos.filter(todo => +todo.id !== +id);
 export default createStore({
   todos: [],
   newTodo: ''
-}).on(setNewTodo, (state, newTodo) => ({...state, newTodo}))
+}).on(load.doneData, (state, todos) => ({...state, todos}))
   .on(addTodo, (state) => ({
     ...state,
     newTodo: '',
